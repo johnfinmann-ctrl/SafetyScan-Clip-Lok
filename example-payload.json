@@ -1,0 +1,59 @@
+{
+  "report_id": "CL-2026-0002",
+  "schema_version": "1.0",
+  "source_system": "safetyscan-clip-lok",
+  "company_id": "demo-company",
+  "site_id": "demo-site-01",
+  "department_id": "warehouse",
+  "object_id": null,
+  "object_type": "rack",
+  "qr_code": null,
+  "event_type": "defect",
+  "priority": "critical",
+  "status": "in_progress",
+  "description": "Søjle i sektion 4 er bøjet efter truckkollision.",
+  "location": "rack-a02",
+  "location_name": "Rack A02",
+  "latitude": 55.676098,
+  "longitude": 12.568337,
+  "accuracy": 12,
+  "location_source": "gps",
+  "event_at": "2026-11-18T15:53:19.517Z",
+  "created_at": "2026-11-18T15:53:19.517Z",
+  "updated_at": null,
+  "closed_at": null,
+  "reporter_id": null,
+  "reporter_type": "named",
+  "responsible_id": "warehouse_manager",
+  "suggested_responsible_id": null,
+  "supplier_id": null,
+  "recommended_action": [],
+  "images": [
+    {
+      "image_id": "CL-2026-0002-img-1",
+      "filename": "CL-2026-0002-1.jpg",
+      "mime_type": "image/jpeg",
+      "role": "before",
+      "storage_reference": "local-browser://CL-2026-0002/photo-1"
+    }
+  ],
+  "attachments": [],
+  "history": [
+    {
+      "at": "2026-11-18T15:53:19.517Z",
+      "action": "created",
+      "from": null,
+      "to": null,
+      "by": "employee"
+    },
+    {
+      "at": "2026-11-18T16:23:19.517Z",
+      "action": "status_changed",
+      "from": "new",
+      "to": "in_progress",
+      "by": "manager"
+    }
+  ],
+  "external_reference": null,
+  "integration_status": "not_sent"
+}
