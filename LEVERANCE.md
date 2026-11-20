@@ -1,6 +1,6 @@
 # SafetyScan Clip-Lok International Demo v1.0 — Leverance
 
-Build: `a484b00c31` · Base: `johnfinmann-ctrl/SafetyScan` @ `c70d82b` (index.html, md5 `05b1f9cd…ec`)
+Build: `e1383b26ef` · Base: `johnfinmann-ctrl/SafetyScan` @ `c70d82b` (index.html, md5 `05b1f9cd…ec`)
 
 ## 1–2. Filer (separat projekt — upload hele mappen til et NYT repo)
 
@@ -83,3 +83,62 @@ Ingen Supabase, intet rigtigt login, ingen backend, ingen cloud-database, ingen 
 
 ## Tilføjet fordi kravspecifikationen krævede det, men basen manglede det
 GPS-knap (valgfri), manuel hændelsestid, historik/audit trail, 5-trins statusflow, Lederadgang som forsidekort, AI-kategoriforslag (kun forslag), nøgleord til AI-forslag på alle 10 sprog.
+
+---
+
+# FINAL QA — 20.11.2026
+
+## Fejl fundet og rettet
+1. `manifest.webmanifest` → `name` var «SafetyScan Clip-Lok International Demo v1.0»; rettet til **«SafetyScan Clip-Lok International»** (krav). `short_name` «SafetyScan CL» uændret.
+2. Build-hash (cache-busting `?v=`) blev kun beregnet ud fra index.html, så en ændring i manifest/ikoner ikke ville give ny version. Hashen omfatter nu også manifest og ikoner — skiftes automatisk ved hvert build.
+
+Ingen ændringer i layout, navigation, flow, farver, logo, sprog, status, datamodel, integration, AI eller rapportflow.
+
+## GitHub Pages-struktur (repo `SafetyScan-Clip-Lok-International`)
+Alle stier er relative. Simuleret under `/SafetyScan-Clip-Lok-International/` over HTTP: index, manifest og alle 7 ikoner svarer 200, `start_url` = `/SafetyScan-Clip-Lok-International/?source=pwa`, `scope` = `/SafetyScan-Clip-Lok-International/`, 0 HTTP-fejl, 0 JS-fejl. Ingen lokale udviklingsstier og ingen rod-absolutte stier.
+
+## Service worker
+Projektet har **ingen** service worker (heller ikke basen). Der er derfor ingen SW-cache, som kan genbruges fra tidligere Clip-Lok-versioner eller påvirke andre SafetyScan-repos. Opdatering efter deploy sker via normal browser-cache + `?v=<build>` på manifest og ikoner.
+
+## Automatiske tests (genkørt uændret)
+| Test | Antal | Bestået | Fejl |
+|---|---|---|---|
+| Regression — iPhone 13-profil | 48 | 48 | 0 |
+| Regression — iPad Pro 11-profil | 48 | 48 | 0 |
+| Regression — Pixel 7 (Android Chrome) | 48 | 48 | 0 |
+| Regression — Desktop 1440×900 | 48 | 48 | 0 |
+| Sprogaudit — 10 sprog × 15 skærme | 150 | 150 | 0 |
+| HTML-rapport — 10 sprog (rå koder) | 10 | 10 | 0 |
+| Tale-fallback (ET/LV) | 2 | 2 | 0 |
+| GitHub Pages-undermappe (HTTP) | 1 | 1 | 0 |
+| **I alt** | **355** | **355** | **0** |
+
+Sprog: 0 rå i18n-nøgler, 0 interne koder synlige på DA/EN/SV/NO/DE/PL/UK/ET/LV/LT. Interne koder uændrede (status `new/assigned/in_progress/resolved/closed`, prioritet `low/medium/high/critical`). Integration: `schema_version` 1.0, `source_system` safetyscan-clip-lok, sproguafhængig JSON, billedmetadata, gamle rapporter åbnes; `sendToExternalSystem` har ingen netværkskald (0 netværks-API'er i hele appen; 0 eksterne requests under test). localStorage: kun `sscli_v1_*`.
+Begrænsning: ægte Safari/WebKit kunne ikke køres i testmiljøet → se manuel tjekliste.
+
+## iPhone/iPad — manuel tjekliste
+Brug den udgivne GitHub Pages-URL (https — GPS og «Føj til hjemmeskærm» virker ikke via fil).
+
+| # | Trin | Forventet | OK |
+|---|---|---|---|
+| 1 | Åbn siden i Safari | Forside med Clip-Lok-logo, «SafetyScan», demo-banner | ☐ |
+| 2 | Del → Føj til hjemmeskærm | Navn foreslås «SafetyScan CL» | ☐ |
+| 3 | Kontrollér appikon | Navy baggrund, blåt CL — intet «S» | ☐ |
+| 4 | Start app fra hjemmeskærmen | Åbner i fuldskærm uden Safari-bjælke | ☐ |
+| 5 | Skift mellem mindst 3 sprog (fx DA → PL → UK) | Skærmen skifter straks, uden reload | ☐ |
+| 6 | Ny registrering → tag billede | Kamera åbner, billede vises i formularen | ☐ |
+| 7 | Tryk «Tilføj GPS» | Tilladelsesdialog; koordinater vises (valgfrit) | ☐ |
+| 8 | Tryk 🎙 og indtal | Tekst indsættes — eller lokaliseret besked, hvis sproget ikke understøttes | ☐ |
+| 9 | Udfyld type/objekt/lokation → Send | Kvittering med ID `CL-2026-xxxx` | ☐ |
+| 10 | Åbn Mine rapporter | Den nye registrering står øverst | ☐ |
+| 11 | Åbn rapport (Lederadgang → dashboard → kort) | Detalje med billede, GPS, tid, historik | ☐ |
+| 12 | Mail → «Del rapport» | iOS share sheet med HTML-rapport | ☐ |
+| 13 | Lederadgang (demo-PIN) | Dashboard med KPI'er | ☐ |
+| 14 | Ændr status (fx Tildelt → I gang) | Status og historik opdateres | ☐ |
+| 15 | Luk appen helt (swipe op) og åbn igen | Starter på forsiden, valgt sprog er bevaret | ☐ |
+| 16 | Kontrollér data | Registrering og statusændring findes stadig | ☐ |
+
+Gentag 1–5 på iPad.
+
+## Originalprojekter
+`SafetyScan` (`c70d82b`) og `SafetyScan-International` (`394c847`): uændrede lokalt og på GitHub. `SafetyScan-Clip-Lok`: uændret herfra (lokal klon `e5cf9b5`, 0 ændringer); remote står nu på `f1a2f47` — ændret uden for denne leverance. Intet er pushet herfra.
